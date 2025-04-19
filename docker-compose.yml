@@ -1,0 +1,47 @@
+version: "3.8"
+
+servicess:
+   backend:
+   gunicorn:
+      build:
+        context: .
+        dockerfile: ./back_end/Dockerfile
+      container_name: pokeclone-backend
+      volumes: 
+        - ./back_end:/app
+      ports:
+        - "8000:8000"
+      depends_on:
+        db:
+          condition: service_healthy
+      restart: always
+    
+   frontend:
+      build:
+        context: .
+        dockerfile: ./front_end/Dockerfile
+      container_name: pokeclone-frontend
+      volumes:
+        - ./front_end:/app
+      ports:
+        - "80:80"
+      depends_on:
+        - backend
+
+   db:
+      iamge: postgres:13
+      container_name: pokeclone-db
+      environment:
+        POSTGRES_DB: pokeclone_db
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        DB_PORT: 5432
+      volumes: 
+        - postgres_data:/var/lib/postgresql/data 
+      ports:
+        - "5432:5432"
+
+volumes:
+  postgres_data:
+    driver: local
+
