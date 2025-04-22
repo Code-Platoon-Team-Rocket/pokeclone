@@ -1,12 +1,11 @@
 version: "3.8"
 
-servicess:
+services:
    backend:
-   gunicorn:
       build:
-        context: .
-        dockerfile: ./back_end/Dockerfile
-      container_name: pokeclone-backend
+        context: ./back_end
+        dockerfile: Dockerfile
+      container_name: pokeclone_backend
       volumes: 
         - ./back_end:/app
       ports:
@@ -18,9 +17,9 @@ servicess:
     
    frontend:
       build:
-        context: .
-        dockerfile: ./front_end/Dockerfile
-      container_name: pokeclone-frontend
+        context: ./front_end
+        dockerfile: Dockerfile
+      container_name: pokeclone_frontend
       volumes:
         - ./front_end:/app
       ports:
@@ -29,17 +28,21 @@ servicess:
         - backend
 
    db:
-      iamge: postgres:13
+      image: postgres:13
       container_name: pokeclone-db
       environment:
         POSTGRES_DB: pokeclone_db
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
-        DB_PORT: 5432
       volumes: 
         - postgres_data:/var/lib/postgresql/data 
       ports:
-        - "5432:5432"
+        - "5433:5432"
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
 
 volumes:
   postgres_data:

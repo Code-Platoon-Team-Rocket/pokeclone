@@ -3,7 +3,7 @@ FROM node:18 AS build
 
 WORKDIR /app
 
-COPY front_end /app
+COPY . /app
 
 RUN npm install && npm run build
 
