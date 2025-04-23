@@ -5,7 +5,7 @@ metadata:
   labels:
     app: pokeclone-backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: pokeclone-backend
@@ -19,14 +19,13 @@ spec:
           image: jeremyhuegel/pokeclone_backend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           env:
             - name: DJANGO_KEY
               valueFrom:
                 secretKeyRef:
                   name: django-secret
-                  key: 'DJANGO_KEY'
-
+                  key: DJANGO_KEY
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -44,20 +43,7 @@ spec:
                   key: DB_HOST
             - name: DB_PORT
               value: '5432'
-            
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: 80
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 5
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: 80
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 20
-      # volumes:
-      #   - name: pokeclone-backend-volume
-      #     persistentVolumeClaim:
-      #       claimName: pokeclone-backend-pvc
+          lifecycle:
+            postStart:
+              exec:
+                command: ['/bin/sh', '-c', 'python manage.py migrate']

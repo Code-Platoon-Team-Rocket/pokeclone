@@ -15,27 +15,14 @@ spec:
         app: pokeclone-frontend
     spec:
       containers:
-        - name: pokeclone
-          image: jeremyhuegel/pokeclone_frontend:latest
+        - name: pokeclone-frontend
+          image: docker4646/pokeclone_frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-          env:
-            - name: API_URL
-              valueFrom:
-                secretKeyRef:
-                  name: django-secret
-                  key: 'API_URL'
-    
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 15
-            periodSeconds: 20
+          # env:
+          #   - name: VITE_API_URL
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: django-secret
+          #         key: VITE_API_URL
