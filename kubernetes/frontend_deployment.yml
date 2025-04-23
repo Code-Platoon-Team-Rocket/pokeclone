@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pokeclone-frontend
+  labels:
+    app: pokeclone-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pokeclone-frontend
+  template:
+    metadata:
+      labels:
+        app: pokeclone-frontend
+    spec:
+      containers:
+        - name: pokeclone
+          image: jeremyhuegel/pokeclone_frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: 'API_URL'
+    
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
