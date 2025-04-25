@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: pokeclone-backend
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 8000

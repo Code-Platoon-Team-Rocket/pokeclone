@@ -13,7 +13,7 @@ kubectl apply -f backend_deployment.yml
 kubectl apply -f backend_service.yml
 
 echo "Deploying frontend..."
-kubectl apply -f frontend_deployment.yml    
+kubectl apply -f frontend_deployment.yml
 kubectl apply -f frontend_service.yml
 
 

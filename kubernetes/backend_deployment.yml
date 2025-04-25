@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: pokeclone-backend
-          image: jeremyhuegel/pokeclone_backend:latest
+          image: docker4646/pokeclone_backend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -46,4 +46,9 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ['/bin/sh', '-c', 'python manage.py migrate']
+                command:
+                  [
+                    '/bin/sh',
+                    '-c',
+                    'python manage.py makemigrations && python manage.py migrate',
+                  ]
